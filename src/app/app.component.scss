@@ -2,6 +2,10 @@
   width: 100% !important;
 }
 
-::ng-deep .w-600 {
-  width: 600px !important;
+.cursor-move {
+  cursor: move !important;
+}
+
+::ng-deep .table-width {
+  width: 800px !important;
 }

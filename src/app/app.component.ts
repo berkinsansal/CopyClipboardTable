@@ -29,16 +29,24 @@ export class AppComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 100; i++) {
       this.rows.push({ description: 'description' + i, value: 'value' + i } as Row);
     }
   }
 
-  copy() {
-
+  copy(rowIndex: number) {
+    console.log('copy ' + rowIndex);
   }
 
-  delete() {
+  edit(rowIndex: number) {
+    console.log('edit ' + rowIndex);
+  }
 
+  delete(rowIndex: number) {
+    console.log('delete ' + rowIndex);
+  }
+
+  saveRows() {
+    console.log('saveRows');
   }
 }

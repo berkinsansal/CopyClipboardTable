@@ -1,23 +1,28 @@
 <div class="d-inline-block">
-  <p-table [value]="rows" tableStyleClass="w-600">
+  <p-table [value]="rows" tableStyleClass="table-width" (onRowReorder)="saveRows()">
     <ng-template pTemplate="header">
       <tr>
+        <th style="width:2.5em"></th>
         <th>Description</th>
         <th>Value</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-row>
-      <tr>
+    <ng-template pTemplate="body" let-row let-index="rowIndex">
+      <tr [pReorderableRow]="index">
+        <td pReorderableRowHandle class="cursor-move">
+          <i class="fa fa-bars"></i>
+        </td>
         <td>
           <div class="ui-inputgroup">
             <textarea pInputTextarea class="w-100prc" [(ngModel)]="row.description" [rows]="1" [autoResize]="true"></textarea>
-            <button pButton class="ui-button-danger" icon="pi pi-trash" [title]="'Delete'" (onClick)="delete()"></button>
+            <button pButton class="ui-button-warning" icon="pi pi-pencil" [title]="'Edit'" (click)="edit(index)"></button>
+            <button pButton class="ui-button-danger" icon="pi pi-trash" [title]="'Delete'" (click)="delete(index)"></button>
           </div>
         </td>
         <td>
           <div class="ui-inputgroup">
             <textarea pInputTextarea class="w-100prc" [(ngModel)]="row.value" [rows]="1" [autoResize]="true"></textarea>
-            <button pButton icon="pi pi-copy" [title]="'Copy'" (onClick)="copy()"></button>
+            <button pButton icon="pi pi-copy" [title]="'Copy'" (click)="copy(index)"></button>
           </div>
         </td>
       </tr>
