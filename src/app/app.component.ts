@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 // import { MenuItem } from 'primeng/api';
 import { Row } from './model/row';
 import { ConfirmationService } from 'primeng/api';
+import { Column } from './model/column';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,7 @@ export class AppComponent implements OnInit {
   //   }
   // }];
 
+  columns: Column[] = [];
   rows: Row[] = [];
   newRow = new Row();
   clonedRows: { [id: number]: Row; } = {};
@@ -32,6 +34,11 @@ export class AppComponent implements OnInit {
   constructor(private confirmationService: ConfirmationService) { }
 
   ngOnInit() {
+    this.columns.push({ id: 0, header: '', width: '60px', resizableColumnDisabled: true} as Column);
+    this.columns.push({ id: 1, header: 'Description', width: '350px', resizableColumnDisabled: false} as Column);
+    this.columns.push({ id: 2, header: 'Value', width: '350px', resizableColumnDisabled: true} as Column);
+    this.columns.push({ id: 3, header: '', width: '135px', resizableColumnDisabled: true} as Column);
+
     for (let i = 0; i < 100; i++) {
       this.rows.push({ id: i, description: 'description' + i, value: 'value' + i } as Row);
     }
@@ -75,6 +82,14 @@ export class AppComponent implements OnInit {
 
   saveRows() {
     console.log('saveRows');
+  }
+
+  saveColumns(event: any) {
+    console.log('saveCols');
+
+    const width = event.element.offsetWidth;
+    this.columns[1].width = width + 'px';
+    this.columns[2].width = (700 - width) + 'px';
   }
 
   private generateNewId(): number {
