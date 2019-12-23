@@ -1,34 +1,73 @@
-<div class="d-inline-block">
-  <p-table [value]="rows" tableStyleClass="table-width" (onRowReorder)="saveRows()">
+<div class="d-inline-block table-padding">
+  <p-table [value]="rows" [dataKey]="'id'" [editMode]="'row'" [tableStyleClass]="'table-width'" (onRowReorder)="saveRows()">
     <ng-template pTemplate="header">
       <tr>
-        <th style="width:2.5em"></th>
+        <th style="width:4.5em"></th>
         <th>Description</th>
         <th>Value</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-row let-index="rowIndex">
-      <tr [pReorderableRow]="index">
-        <td pReorderableRowHandle class="cursor-move">
+    <ng-template pTemplate="body" let-row let-index="rowIndex" let-editing="editing">
+      <tr [pReorderableRow]="index" [pEditableRow]="row">
+        <td *ngIf="editing"></td>
+        <td *ngIf="!editing" pReorderableRowHandle class="cursor-move text-center">
           <i class="fa fa-bars"></i>
         </td>
         <td>
-          <div class="ui-inputgroup">
-            <textarea pInputTextarea class="w-100prc" [(ngModel)]="row.description" [rows]="1" [autoResize]="true"></textarea>
-            <button pButton class="ui-button-warning" icon="pi pi-pencil" [title]="'Edit'" (click)="edit(index)"></button>
-            <button pButton class="ui-button-danger" icon="pi pi-trash" [title]="'Delete'" (click)="delete(index)"></button>
-          </div>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <div class="ui-inputgroup">
+                <textarea pInputTextarea class="w-100prc" [(ngModel)]="row.description" [rows]="1" [autoResize]="true"></textarea>
+                <button pButton pSaveEditableRow pInitEditableRow class="ui-button-success" icon="pi pi-check" [title]="'Update'" (click)="updateRow(row)"></button>
+                <button pButton pCancelEditableRow class="ui-button-danger" icon="pi pi-times" [title]="'Cancel'" (click)="cancelEditRow(row, index)"></button>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="output">
+              <div class="d-flex">
+                <div class="row align-items-center w-100prc">
+                  <div class="col-12">
+                    {{ row.description }}
+                  </div>
+                </div>
+                <div class="ui-inputgroup">
+                  <button pButton pInitEditableRow class="ui-button-warning" icon="pi pi-pencil" [title]="'Edit'" (click)="editRow(row)"></button>
+                  <button pButton class="ui-button-danger" icon="pi pi-trash" [title]="'Delete'" (click)="deleteRow(index)"></button>
+                </div>
+              </div>
+            </ng-template>
+          </p-cellEditor>
         </td>
         <td>
-          <div class="ui-inputgroup">
-            <textarea pInputTextarea class="w-100prc" [(ngModel)]="row.value" [rows]="1" [autoResize]="true"></textarea>
-            <button pButton icon="pi pi-copy" [title]="'Copy'" (click)="copy(index)"></button>
-          </div>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <div class="ui-inputgroup">
+                <textarea pInputTextarea class="w-100prc" [(ngModel)]="row.value" [rows]="1" [autoResize]="true"></textarea>
+                <button pButton icon="pi pi-copy" [title]="'Copy'" (click)="copyRow(row)"></button>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="output">
+              <div class="d-flex">
+                <div class="row align-items-center w-100prc">
+                  <div class="col-12">
+                    {{ row.value }}
+                  </div>
+                </div>
+                <button pButton icon="pi pi-copy" [title]="'Copy'" (click)="copyRow(row)"></button>
+              </div>
+            </ng-template>
+          </p-cellEditor>
         </td>
       </tr>
     </ng-template>
   </p-table>
 </div>
+
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle">
+  <p-footer>
+    <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+    <button type="button" pButton icon="pi pi-check" label="Yes" (click)="cd.accept()"></button>
+  </p-footer>
+</p-confirmDialog>
 
 
 <!-- <div class="row">

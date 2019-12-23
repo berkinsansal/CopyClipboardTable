@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 // import { MenuItem } from 'primeng/api';
 import { Row } from './model/row';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -25,28 +26,62 @@ export class AppComponent implements OnInit {
   // }];
 
   rows: Row[] = [];
+  newRow = new Row();
+  clonedRows: { [id: number]: Row; } = {};
 
-  constructor() { }
+  constructor(private confirmationService: ConfirmationService) { }
 
   ngOnInit() {
     for (let i = 0; i < 100; i++) {
-      this.rows.push({ description: 'description' + i, value: 'value' + i } as Row);
+      this.rows.push({ id: i, description: 'description' + i, value: 'value' + i } as Row);
     }
   }
 
-  copy(rowIndex: number) {
-    console.log('copy ' + rowIndex);
+  copyRow(row: Row) {
+    console.log('copy ' + row.id);
   }
 
-  edit(rowIndex: number) {
-    console.log('edit ' + rowIndex);
+  editRow(row: Row) {
+    console.log('edit ' + row.id);
+
+    this.clonedRows[row.id] = {...row};
   }
 
-  delete(rowIndex: number) {
-    console.log('delete ' + rowIndex);
+  updateRow(row: Row) {
+    console.log('update ' + row.id);
+
+    delete this.clonedRows[row.id];
+  }
+
+  cancelEditRow(row: Row, rowIndex: number) {
+    console.log('cancel ' + rowIndex);
+
+    this.rows[rowIndex] = this.clonedRows[row.id];
+    delete this.clonedRows[row.id];
+  }
+
+  deleteRow(rowIndex: number) {
+    this.confirmationService.confirm({
+      message: 'Do you want to delete this record?',
+      header: 'Delete Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        console.log('delete ' + rowIndex);
+
+        this.rows.splice(rowIndex, 1);
+      }
+    });
   }
 
   saveRows() {
     console.log('saveRows');
+  }
+
+  private generateNewId(): number {
+    if (this.rows && this.rows.length > 0) {
+      return Math.max(...this.rows.map(x => x.id)) + 1;
+    } else {
+      return 0;
+    }
   }
 }
