@@ -1,13 +1,43 @@
-<div class="d-inline-block table-padding table-width">
-  <p-table [columns]="columns" [value]="rows" [dataKey]="'id'" [autoLayout]="true" [editMode]="'row'" [rowHover]="true" [resizableColumns]="true" (onRowReorder)="saveRows()"
-    (onColResize)="saveColumns($event)">
+<p-toast position="top-left"></p-toast>
+
+<div class="d-inline-block table-padding">
+  <p-table #table id="table" [columns]="columns" [value]="rows" [dataKey]="'id'" [autoLayout]="true" [editMode]="'row'" [rowHover]="true" [resizableColumns]="true" [selectionMode]="'single'"
+    [globalFilterFields]="['description','value']" [stateStorage]="'local'" [stateKey]="'table-state'" (onRowReorder)="saveRows()" (onRowSelect)="handleRowSelect($event)" (onColResize)="saveColumns($event)">
+    <ng-template pTemplate="caption">
+      <div class="row justify-content-between" [ngClass]="{'form-group': newRow}">
+        <div class="col-auto">
+          <button *ngIf="!newRow" pButton class="ui-button-success" icon="pi pi-plus" [title]="'Add New'" (click)="addNewRow()"></button>
+        </div>
+        <div class="col-auto">
+          <div class="ui-inputgroup">
+            <span class="ui-inputgroup-addon"><i class="pi pi-search"></i></span>
+            <input pInputText [ngModel]="table.filters['global']?.value" type="text" size="40" placeholder="Global Filter" (input)="table.filterGlobal($event.target.value, 'contains')">
+            <button pButton type="button" icon="pi pi-times" class="table-global-filter-clear-btn" (click)="table.filterGlobal('', 'contains')"></button> 
+          </div>
+        </div>
+      </div>
+      <div *ngIf="newRow" class="row">
+        <div class="col">
+          <textarea pInputTextarea class="w-100prc" placeholder="Description" [(ngModel)]="newRow.description" [rows]="1" [autoResize]="true"></textarea>
+        </div>
+        <div class="col">
+          <textarea pInputTextarea class="w-100prc" placeholder="Value" [(ngModel)]="newRow.value" [rows]="1" [autoResize]="true"></textarea>
+        </div>
+        <div class="col-auto">
+          <div class="ui-inputgroup">
+            <button pButton class="ui-button-success" icon="pi pi-check" [title]="'Add New'" (click)="addNewRow()"></button>
+            <button pButton class="ui-button-danger" icon="pi pi-times" [title]="'Cancel'" (click)="cancelAddNewRow()"></button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
     <ng-template pTemplate="header" let-columns>
       <tr>
         <th *ngFor="let col of columns" pResizableColumn [pResizableColumnDisabled]="col.resizableColumnDisabled" [style.width]="col.width">{{ col.header }}</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-row let-index="rowIndex" let-editing="editing">
-      <tr [pReorderableRow]="index" [pEditableRow]="row" class="ui-selectable-row">
+      <tr [pReorderableRow]="index" [pEditableRow]="row" [pSelectableRow]="row" [pSelectableRowDisabled]="editing" class="ui-selectable-row">
         <td *ngIf="editing"></td>
         <td *ngIf="!editing" pReorderableRowHandle class="cursor-move text-center">
           <i class="fa fa-bars"></i>
@@ -18,9 +48,7 @@
               <textarea pInputTextarea class="w-100prc" [(ngModel)]="row.description" [rows]="1" [autoResize]="true"></textarea>
             </ng-template>
             <ng-template pTemplate="output">
-              <div class="row align-items-center w-100prc">
-                <div class="col-12 cell-output-text">{{ row.description }}</div>
-              </div>
+              <div class="w-100prc cell-output-text">{{ row.description }}</div>
             </ng-template>
           </p-cellEditor>
         </td>
@@ -30,9 +58,7 @@
               <textarea pInputTextarea class="w-100prc" [(ngModel)]="row.value" [rows]="1" [autoResize]="true"></textarea>
             </ng-template>
             <ng-template pTemplate="output">
-              <div class="row align-items-center w-100prc">
-                <div class="col-12 cell-output-text">{{ row.value }}</div>
-              </div>
+              <div class="w-100prc cell-output-text">{{ row.value }}</div>
             </ng-template>
           </p-cellEditor>
         </td>
@@ -42,7 +68,7 @@
             <div class="ui-inputgroup">
               <button *ngIf="!editing" pButton pInitEditableRow class="ui-button-warning" icon="pi pi-pencil" [title]="'Edit'" (click)="editRow(row)"></button>
               <button *ngIf="!editing" pButton class="ui-button-danger" icon="pi pi-trash" [title]="'Delete'" (click)="deleteRow(index)"></button>
-              <button *ngIf="editing" pButton pSaveEditableRow pInitEditableRow class="ui-button-success" icon="pi pi-check" [title]="'Update'" (click)="updateRow(row)"></button>
+              <button *ngIf="editing" pButton pSaveEditableRow class="ui-button-success" icon="pi pi-check" [title]="'Update'" (click)="updateRow(row)"></button>
               <button *ngIf="editing" pButton pCancelEditableRow class="ui-button-danger" icon="pi pi-times" [title]="'Cancel'" (click)="cancelEditRow(row, index)"></button>
             </div>
           </div>

@@ -1,34 +1,41 @@
 .mr-10 {
-  margin-right: 10px !important;
-}
-
-.w-100prc {
-  width: 100% !important;
-}
-
-.cursor-move {
-  cursor: move !important;
-}
-
-.table-padding {
-  padding: 10px 15px !important;
-}
-
-.table-width {
-  width: 926px !important;
-}
-
-.table-textarea-col-padding-y {
-  padding-top: 5px !important;
-  padding-bottom: 0 !important;
-}
-
-.table-button-col-padding-y {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-.cell-output-text {
-  white-space: pre-wrap;
-  word-break: break-word;
-}
+    margin-right: 10px !important;
+  }
+  
+  .w-100prc {
+    width: 100% !important;
+  }
+  
+  .cursor-move {
+    cursor: move !important;
+  }
+  
+  .table-global-filter-clear-btn {
+    color: #333333 !important;
+    background: #ffffff !important;
+    border: 1px solid #a6a6a6 !important;
+  }
+  
+  .table-padding {
+    padding: 10px 15px !important;
+  }
+  
+  .table-textarea-col-padding-y {
+    padding-top: 5px !important;
+    padding-bottom: 0 !important;
+  }
+  
+  .table-button-col-padding-y {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  
+  .cell-output-text {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  
+  ::ng-deep .ui-state-highlight {
+    background-color: #cde3f5 !important;
+    color: #333333 !important;
+  }
