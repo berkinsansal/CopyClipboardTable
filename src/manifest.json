@@ -2,11 +2,11 @@
   "name": "Copy Clipboard Table",
   "version": "1.0",
   "description": "Easy way to copy frequently used texts",
-  "manifest_version": 2,
+  "manifest_version": 3,
   "permissions": [
     "storage"
   ],
-  "browser_action": {
+  "action": {
     "default_popup": "index.html"
   }
 }
